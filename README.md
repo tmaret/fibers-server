@@ -21,7 +21,7 @@ OpenJDK 64-Bit Server VM (build 15-loom+4-55, mixed mode, sharing)
 mvn clean:install
 ```
 
-# Run
+# Run
 
 Print help usage via
 
