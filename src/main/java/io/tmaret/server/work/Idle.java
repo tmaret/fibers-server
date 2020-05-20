@@ -20,13 +20,9 @@ package io.tmaret.server.work;
 
 public class Idle {
 
-    private final long delay;
+    public static final int DEFAULT_DELAY = 0;
 
-    public Idle(long delay) {
-        this.delay = delay;
-    }
-
-    public String process() {
+    public String process(int delay) {
         try {
             Thread.sleep(delay);
             return String.valueOf(delay);

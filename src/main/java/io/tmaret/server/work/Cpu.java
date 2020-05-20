@@ -24,13 +24,9 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256;
 
 public class Cpu {
 
-    private final int iterations;
+    public static final int DEFAULT_CPU_ITERATIONS = 10_000;
 
-    public Cpu(int iterations) {
-        this.iterations = iterations;
-    }
-
-    public String process() {
+    public String process(int iterations) {
         byte[] value = new byte[256];
         current().nextBytes(value);
         for (int i = 0; i < iterations; i++) {

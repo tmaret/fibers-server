@@ -51,19 +51,10 @@ public class ServerStarter implements Callable<Integer> {
     @Option(names = { "-h", "--help" }, usageHelp = true, description = "Display a help message")
     private boolean helpRequested = false;
 
-    @Option(names = {"-p", "--port"}, defaultValue = "9000", description = "The server port to listen for connections (default: ${DEFAULT-VALUE})")
-    private int port = 9000;
+    @Option(names = {"-p", "--port"}, defaultValue = "${env:SERVER_PORT:-8080}", description = "The server port to listen for connections (default: ${DEFAULT-VALUE})")
+    private int port = 8080;
 
-    @Option(names = {"-c", "--cpu-iterations"}, defaultValue = "10000", description = "The number of SHA-256 iterations included in the response processing (default: ${DEFAULT-VALUE})")
-    private int cpuIterations = 10_000;
-
-    @Option(names = {"-f", "--file-size"}, defaultValue = "102400", description = "The size in Byte of the file included in the response (default: ${DEFAULT-VALUE})")
-    private int fileLength = 100 * 1024;
-
-    @Option(names = {"-d", "--delay-idle"}, defaultValue = "0", description = "The delay in ms to sleep when processing the response (default: ${DEFAULT-VALUE})")
-    private long idleDelay = 0;
-
-    @Option(names = {"-t", "--thread-factory"}, defaultValue = "kernel", description = "Thread factory implementation in: ${COMPLETION-CANDIDATES} (default: ${DEFAULT-VALUE})")
+    @Option(names = {"-t", "--thread-factory"}, defaultValue = "${env:SERVER_THREAD_FACTORY:-kernel}", description = "Thread factory implementation in: ${COMPLETION-CANDIDATES} (default: ${DEFAULT-VALUE})")
     private ThreadSupport threadSupport;
 
     private enum ThreadSupport {
@@ -79,12 +70,12 @@ public class ServerStarter implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         ThreadFactory threadFactory = (threadSupport == ThreadSupport.fibers) ? fiberThreadFactory() : defaultThreadFactory();
-        LOG.info("Start server on port {} with thread support: {}, cpu: {}, io: {}, idle: {}" ,
-                port, threadSupport, cpuIterations, idleDelay, idleDelay);
+        LOG.info("Start server on port {} with thread support: {}" ,
+                port, threadSupport);
 
-        Io io = new Io(fileLength);
-        Cpu cpu = new Cpu(cpuIterations);
-        Idle idle = new Idle(idleDelay);
+        Io io = new Io();
+        Cpu cpu = new Cpu();
+        Idle idle = new Idle();
 
         ThreadPool threadPool = new QueuedThreadPool(MAX_VALUE, 8, 60000, -1, null ,null, threadFactory);
         Server server = new Server(threadPool);

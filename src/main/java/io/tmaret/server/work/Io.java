@@ -26,6 +26,8 @@ import java.io.RandomAccessFile;
 import java.io.UncheckedIOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.nio.file.Files.createTempFile;
 import static java.nio.file.Files.newBufferedWriter;
@@ -34,40 +36,38 @@ import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 
 public class Io {
 
-    private final Path filePath;
+    public static final int DEFAULT_FILE_LENGTH = 100 * 1024;
 
-    private final int fileLength;
+    private final Map<Integer, Path> files = new ConcurrentHashMap<>();
 
-    public Io(int fileLength) {
-        this.fileLength = fileLength;
+    public FileChannel fileChannel(int fileLength) {
         try {
-            filePath = createTempFile("io-busy", ".tmp");
-            try (BufferedWriter writer = newBufferedWriter(filePath)) {
-                writer.write(randomNumeric(fileLength));
-                writer.flush();
-            }
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public int getFileLength() {
-        return fileLength;
-    }
-
-    public FileChannel fileChannel() {
-        try {
-            return new RandomAccessFile(filePath.toFile(), "r").getChannel();
+            return new RandomAccessFile(files.computeIfAbsent(fileLength,
+                    this::createFile).toFile(), "r").getChannel();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public InputStream inputstream() {
+    public InputStream inputstream(int fileLength) {
         try {
-            return newInputStream(filePath);
+            return newInputStream(files.computeIfAbsent(fileLength,
+                    this::createFile));
         } catch (IOException e) {
             throw new IllegalStateException(e);
+        }
+    }
+
+    private Path createFile(int fileLength) {
+        try {
+            Path filePath = createTempFile("io-busy-" + fileLength, ".tmp");
+            try (BufferedWriter writer = newBufferedWriter(filePath)) {
+                writer.write(randomNumeric(fileLength));
+                writer.flush();
+            }
+            return filePath;
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 }

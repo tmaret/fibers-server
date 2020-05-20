@@ -26,18 +26,35 @@ mvn clean:install
 Print help usage via
 
 ```
-java -jar target/server-0.0.1-SNAPSHOT-jar-with-dependencies.jar -h
+docker run -p 8080:8080 -i tmaretdotio/fibers-server:0.0.1-SNAPSHOT -h
 ```
 
 Run a server using kernel threads with
 
 ```
-java -jar target/server-0.0.1-SNAPSHOT-jar-with-dependencies.jar -k kernel
+docker run -p 8080:8080 -i tmaretdotio/fibers-server:0.0.1-SNAPSHOT -k kernel
 ```
 
 Run the server using fibers with
 
 ```
-java -jar target/server-0.0.1-SNAPSHOT-jar-with-dependencies.jar -k fibers
+docker run -p 8080:8080 -i tmaretdotio/fibers-server:0.0.1-SNAPSHOT -k fibers
 ```
 
+Send request to be served by a sync servlet
+
+```
+curl http://localhost:8080/sync
+``` 
+
+Send request to be served by an async servlet
+
+```
+curl http://localhost:8080/async
+```
+
+Send a request with the specific `cpuIterations`, `idleDelay` and `fileLength`
+
+```
+curl 'http://localhost:8080/sync?cpuIterations=10000&idleDelay=0&fileLength=100000'
+```

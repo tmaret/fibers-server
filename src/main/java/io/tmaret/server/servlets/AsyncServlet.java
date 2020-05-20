@@ -35,6 +35,10 @@ import io.tmaret.server.work.Cpu;
 import io.tmaret.server.work.Idle;
 import io.tmaret.server.work.Io;
 
+import static io.tmaret.server.work.Cpu.DEFAULT_CPU_ITERATIONS;
+import static io.tmaret.server.work.Idle.DEFAULT_DELAY;
+import static io.tmaret.server.work.Io.DEFAULT_FILE_LENGTH;
+import static java.lang.Integer.parseInt;
 import static java.nio.channels.FileChannel.MapMode.READ_ONLY;
 import static java.util.Objects.requireNonNull;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
@@ -67,12 +71,15 @@ public class AsyncServlet extends HttpServlet {
                 res.setStatus(SC_OK);
                 res.setContentType("text/plain");
                 res.setCharacterEncoding("utf-8");
-                res.setContentLength(io.getFileLength());
-                res.addHeader("X-Request-ID", cpu.process());
-                res.addHeader("X-Latency", idle.process());
+                res.addHeader("X-Request-ID",
+                        cpu.process(getParameter(req, "cpuIterations", DEFAULT_CPU_ITERATIONS)));
+                res.addHeader("X-Latency",
+                        idle.process(getParameter(req, "idleDelay", DEFAULT_DELAY)));
+                int fileLength = getParameter(req, "fileLength", DEFAULT_FILE_LENGTH);
+                res.setContentLength(fileLength);
 
                 HttpOutput sos = (HttpOutput) res.getOutputStream();
-                MappedByteBuffer buffer = io.fileChannel().map(READ_ONLY, 0, io.getFileLength());
+                MappedByteBuffer buffer = io.fileChannel(fileLength).map(READ_ONLY, 0, fileLength);
                 ByteBuffer data = buffer.asReadOnlyBuffer();
                 sos.setWriteListener(new WriteListener() {
 
@@ -96,5 +103,9 @@ public class AsyncServlet extends HttpServlet {
                 throw new UncheckedIOException(e);
             }
         });
+    }
+
+    static int getParameter(HttpServletRequest req, String paramName, int defaultValue) {
+        return (req.getParameter(paramName) != null) ? parseInt(req.getParameter(paramName)) : defaultValue;
     }
 }
