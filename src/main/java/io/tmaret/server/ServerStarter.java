@@ -59,7 +59,7 @@ public class ServerStarter implements Callable<Integer> {
     @Option(names = {"-t", "--thread-factory"}, defaultValue = "${env:SERVER_THREAD_FACTORY:-kernel}", description = "Thread factory implementation in: ${COMPLETION-CANDIDATES} (default: ${DEFAULT-VALUE})")
     private ThreadSupport threadSupport;
 
-    @Option(names = {"-c", "--thread-pool-capacity"}, defaultValue = "${env:SERVER_THREAD_FACTORY:--1}", description = "The thread pool max capacity or -1 for unbounded capacity (default: ${DEFAULT-VALUE})")
+    @Option(names = {"-c", "--thread-pool-capacity"}, defaultValue = "${env:SERVER_POOL_CAPACITY:--1}", description = "The thread pool max capacity or -1 for unbounded capacity (default: ${DEFAULT-VALUE})")
     private int poolCapacity = -1;
 
     private enum ThreadSupport {
