@@ -48,20 +48,28 @@ Run the server with bounded pool (400) and lightweight threads
 docker run -p 8080:8080 -i tmaretdotio/fibers-server:0.0.2 -t fibers -c 400
 ```
 
-Send request to be served by a sync servlet
+# Test
+
+Request served by a sync servlet
 
 ```
 curl http://localhost:8080/sync
 ```
 
-Send request to be served by an async servlet
+Request served by an async servlet
 
 ```
 curl http://localhost:8080/async
 ```
 
-Send a request with the specific `cpuIterations`, `idleDelay` and `fileLength`
+Specify the amount of work performed by the servlet before returning the response.
 
 ```
 curl 'http://localhost:8080/sync?cpuIterations=10000&idleDelay=0&fileLength=100000'
 ```
+
+| Request Parameter | Definition |
+| :---------------: | ---------- |
+| `cpuIterations`   | The number of SHA256 iterations on a 256 byte array. Default is 10'000 iterations and corresponds to ~ 3ms on a 2.3 GHz Intel Core i9. |
+| `idleDelay`       | The time to sleep in ms. Default is 0ms. |
+| `fileLength`      | The length in bytes of the file returned. The file is auto-generated and served from disk. Default length is 100KB.|
