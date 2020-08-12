@@ -22,6 +22,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletHandler;
@@ -98,6 +102,12 @@ public class ServerStarter implements Callable<Integer> {
 
         ServletHolder syncHolder = new ServletHolder(new SyncServlet(cpu, io, idle));
         handler.addServletWithMapping(syncHolder, "/sync");
+
+        handler.addServletWithMapping(new ServletHolder(new HttpServlet() {
+            public void doGet(HttpServletRequest req, HttpServletResponse res) {
+                res.setStatus(200);
+            }
+        }), "/health");
 
         getRuntime().addShutdownHook(new Thread(() -> stop(server)));
 
