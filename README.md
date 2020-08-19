@@ -80,7 +80,7 @@ The following table summarises the `fibers-server` throughput under load. The tr
 
 The fibers throughputs were obtained with an unbounded pool. The kernel thread values were obtained with a pool of capacity 1000.
 
-## Experiment #1
+## Experiment #1 — local sync servlet 95% idle
 
 The request handling time is mostly idle. It consists of 80% sleep, 15% IO and 5% CPU. The raw results are [here](./benchmark/experiment-1).
 
@@ -128,7 +128,7 @@ The N/A values indicates the test could not complete.
 
 ![Throughput](./benchmark/experiment-1/graph/throughput-1s.svg)
 
-## Experiment #2
+## Experiment #2 — local sync servlet 99% idle
 
 The request handling time is mostly idle. It consists of 95% sleep, 4.5% IO and 0.4% CPU. The raw results are [here](./benchmark/experiment-2).
 
@@ -175,9 +175,9 @@ The server and traffic generator deployed as two containers inside a single Kube
 
 ![Throughput](./benchmark/experiment-2/graph/throughput-1s.svg)
 
-## Experiment #3
+## Experiment #3 — remote sync servlet 99% idle
 
-The request handling time is mostly idle. It consists of 80% sleep, 15% IO and 5% CPU. The raw results are [here](./benchmark/experiment-1).
+The request handling time is mostly idle. It consists of 95% sleep, 4.5% IO and 0.4% CPU. The raw results are [here](./benchmark/experiment-3).
 
 The server and traffic generator deployed in two different Pods. Network between Pods using Kubernetes [cluster routing](https://kubernetes.io/docs/concepts/cluster-administration/networking).
 
