@@ -24,9 +24,7 @@ public class Idle {
 
     public String process(int delay) {
         try {
-            synchronized (this) {
-                wait(delay);
-            }
+            Thread.sleep(delay);
             return String.valueOf(delay);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
