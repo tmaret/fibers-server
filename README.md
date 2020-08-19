@@ -76,10 +76,7 @@ curl 'http://localhost:8080/sync?cpuIterations=10000&idleDelay=0&fileLength=1000
 
 # Benchmark
 
-The following table summarises the `fibers-server` throughput under load.
-The server and the [wrk2](https://github.com/giltene/wrk2) traffic generator were
-deployed as two containers inside a single Kubernetes Pod and thus shared their network
-interface. The server was allocated 4 cpu and 3G memory limits.
+The following table summarises the `fibers-server` throughput under load. The traffic generator used was [wrk2](https://github.com/giltene/wrk2). The server was allocated 4 cpu and 3G memory limits. The generator 8 cpu and 4G memory limit.
 
 The fibers throughputs were obtained with an unbounded pool. The kernel thread values were obtained with a pool of capacity 1000.
 
@@ -87,11 +84,9 @@ The fibers throughputs were obtained with an unbounded pool. The kernel thread v
 
 The request handling time is mostly idle. It consists of 80% sleep, 15% IO and 5% CPU. The raw results are [here](./benchmark/experiment-1).
 
-### Throughput for 10ms requests
+The server and traffic generator deployed as two containers inside a single Kubernetes Pod. Network via localhost on a shared network interface.
 
-cpuIterations=1000
-idleDelay=8
-fileLength=1000
+### Throughput for 10ms requests
 
 |Concurrency (threads)|fibers req/s|kernel req/s|
 |---------------------|------------|------------|
@@ -107,10 +102,6 @@ fileLength=1000
 
 ### Throughput for 100ms requests
 
-cpuIterations=10000
-idleDelay=70
-fileLength=10000
-
 |Concurrency (threads)|fibers req/s|kernel req/s|
 |---------------------|------------|------------|
 |100                  |330         |256         |
@@ -123,10 +114,6 @@ fileLength=10000
 ![Throughput](./benchmark/experiment-1/graph/throughput-100ms.svg)
 
 ### Throughput for 1s requests
-
-cpuIterations=100000
-idleDelay=700
-fileLength=100000
 
 The N/A values indicates the test could not complete.
 
@@ -145,11 +132,9 @@ The N/A values indicates the test could not complete.
 
 The request handling time is mostly idle. It consists of 95% sleep, 4.5% IO and 0.4% CPU. The raw results are [here](./benchmark/experiment-2).
 
-### Throughput for 10ms requests
+The server and traffic generator deployed as two containers inside a single Kubernetes Pod. Network via localhost on a shared network interface.
 
-cpuIterations=133
-idleDelay=9
-fileLength=1000
+### Throughput for 10ms requests
 
 |Concurrency (threads)|fibers req/s|kernel req/s|
 |---------------------|------------|------------|
@@ -165,10 +150,6 @@ fileLength=1000
 
 ### Throughput for 100ms requests
 
-cpuIterations=1330
-idleDelay=95
-fileLength=10000
-
 |Concurrency (threads)|fibers req/s|kernel req/s|
 |---------------------|------------|------------|
 |100                  |1012        |1025        |
@@ -183,10 +164,6 @@ fileLength=10000
 
 ### Throughput for 1s requests
 
-cpuIterations=13300
-idleDelay=960
-fileLength=100000
-
 |Concurrency (threads)|fibers req/s|kernel req/s|
 |---------------------|------------|------------|
 |100                  |100         |99          |
@@ -197,6 +174,68 @@ fileLength=100000
 |4000                 |198         |169         |
 
 ![Throughput](./benchmark/experiment-2/graph/throughput-1s.svg)
+
+## Experiment #1
+
+The request handling time is mostly idle. It consists of 80% sleep, 15% IO and 5% CPU. The raw results are [here](./benchmark/experiment-1).
+
+The server and traffic generator deployed in two different Pods. Network between Pods using Kubernetes [cluster routing](https://kubernetes.io/docs/concepts/cluster-administration/networking).
+
+### Throughput for 10ms requests
+
+|Concurrency (threads)|fibers req/s|kernel req/s|
+|---------------------|------------|------------|
+|100                  |9633        |9214        |
+|250                  |14181       |9444        |
+|500                  |14618       |9007        |
+|1000                 |13372       |8415        |
+|2000                 |13406       |9485        |
+|4000                 |12574       |9643        |
+
+
+![Throughput](./benchmark/experiment-3/graph/throughput-10ms.svg)
+
+
+### Throughput for 100ms requests
+
+|Concurrency (threads)|fibers req/s|kernel req/s|
+|---------------------|------------|------------|
+|100                  |1027        |1022        |
+|250                  |1980        |1663        |
+|500                  |1973        |1592        |
+|1000                 |1938        |1530        |
+|2000                 |1885        |1554        |
+|4000                 |2056        |1577        |
+
+![Throughput](./benchmark/experiment-3/graph/throughput-100ms.svg)
+
+### Throughput for 1s requests
+
+|Concurrency (threads)|fibers req/s|kernel req/s|
+|---------------------|------------|------------|
+|100                  |100         |97          |
+|250                  |202         |172         |
+|500                  |206         |176         |
+|1000                 |203         |156         |
+|2000                 |197         |151         |
+|4000                 |212         |168         |
+
+![Throughput](./benchmark/experiment-3/graph/throughput-1s.svg)
+
+### Throughput for 10s requests
+
+The N/A values indicates the test could not complete.
+
+|Concurrency (threads)|fibers req/s|kernel req/s|
+|---------------------|------------|------------|
+|100                  |8           |4           |
+|250                  |12          |10          |
+|500                  |8           |0           |
+|1000                 |11          |N/A         |
+|2000                 |10          |N/A         |
+|4000                 |11          |N/A         |
+
+![Throughput](./benchmark/experiment-3/graph/throughput-10s.svg)
 
 
 ## Monitoring resources
