@@ -175,7 +175,7 @@ The server and traffic generator deployed as two containers inside a single Kube
 
 ![Throughput](./benchmark/experiment-2/graph/throughput-1s.svg)
 
-## Experiment #1
+## Experiment #3
 
 The request handling time is mostly idle. It consists of 80% sleep, 15% IO and 5% CPU. The raw results are [here](./benchmark/experiment-1).
 
