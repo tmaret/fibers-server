@@ -85,7 +85,7 @@ The fibers throughputs were obtained with an unbounded pool. The kernel thread v
 
 ## Experiment #1
 
-The request handling time is mostly idle. It consists of 80% sleep, 15% IO and 5% CPU. The raw results are [here](./benchmark/experience-1).
+The request handling time is mostly idle. It consists of 80% sleep, 15% IO and 5% CPU. The raw results are [here](./benchmark/experiment-1).
 
 ### Throughput for 10ms requests
 
@@ -102,7 +102,7 @@ fileLength=1000
 |2000                 |3265        |1863        |
 |4000                 |3055        |1839        |
 
-![Throughput](./benchmark/experience-1/graph/throughput-10ms.svg)
+![Throughput](./benchmark/experiment-1/graph/throughput-10ms.svg)
 
 
 ### Throughput for 100ms requests
@@ -120,7 +120,7 @@ fileLength=10000
 |2000                 |322         |173         |
 |4000                 |325         |177         |
 
-![Throughput](./benchmark/experience-1/graph/throughput-100ms.svg)
+![Throughput](./benchmark/experiment-1/graph/throughput-100ms.svg)
 
 ### Throughput for 1s requests
 
@@ -139,11 +139,11 @@ The N/A values indicates the test could not complete.
 |2000                 |32          |N/A         |
 |4000                 |29          |N/A         |
 
-![Throughput](./benchmark/experience-1/graph/throughput-1s.svg)
+![Throughput](./benchmark/experiment-1/graph/throughput-1s.svg)
 
 ## Experiment #2
 
-The request handling time is mostly idle. It consists of 95% sleep, 4.5% IO and 0.4% CPU. The raw results are [here](./benchmark/experience-2).
+The request handling time is mostly idle. It consists of 95% sleep, 4.5% IO and 0.4% CPU. The raw results are [here](./benchmark/experiment-2).
 
 ### Throughput for 10ms requests
 
@@ -161,7 +161,7 @@ fileLength=1000
 |4000                 |12973       |10045       |
 
 
-![Throughput](./benchmark/experience-2/graph/throughput-10ms.svg)
+![Throughput](./benchmark/experiment-2/graph/throughput-10ms.svg)
 
 ### Throughput for 100ms requests
 
@@ -179,7 +179,7 @@ fileLength=10000
 |4000                 |1918        |1570        |
 
 
-![Throughput](./benchmark/experience-2/graph/throughput-100ms.svg)
+![Throughput](./benchmark/experiment-2/graph/throughput-100ms.svg)
 
 ### Throughput for 1s requests
 
@@ -196,7 +196,7 @@ fileLength=100000
 |2000                 |199         |173         |
 |4000                 |198         |169         |
 
-![Throughput](./benchmark/experience-2/graph/throughput-1s.svg)
+![Throughput](./benchmark/experiment-2/graph/throughput-1s.svg)
 
 
 ## Monitoring resources
