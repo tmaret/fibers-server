@@ -291,6 +291,20 @@ The server was allocated 8 cores and 3GB memory.
 
 ![Throughput](./benchmark/experiment-4/graph/throughput-100ms.svg)
 
+### Throughput for 1s requests
+
+|Concurrency (threads)|fibers req/s|kernel req/s|
+|---------------------|------------|------------|
+|100                  |98          |97          |
+|250                  |239         |230         |
+|500                  |398         |315         |
+|1000                 |406         |270         |
+|2000                 |410         |257         |
+|4000                 |402         |285         |
+|8000                 |452         |325         |
+
+![Throughput](./benchmark/experiment-4/graph/throughput-1s.svg)
+
 ## Monitoring resources
 
 Using `top` while benchmarking the server with 4000 concurrency shows ~ 1000 kernel threads to support the `kernel` server mode
